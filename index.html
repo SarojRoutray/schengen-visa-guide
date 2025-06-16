@@ -14,6 +14,7 @@
         - Document Checklist: Report Info (Document list) -> Goal (Organize/Inform) -> Interactive accordion list -> HTML/JS -> Justification: Prevents information overload by chunking a long list into digestible parts.
         - Fees: Report Info (Fee data) -> Goal (Compare) -> Chart.js Bar Chart -> Interaction: Button to toggle pre/post June 2024 fees -> Justification: Visually compares costs effectively.
         - Timeline: Report Info (Application window/processing time) -> Goal (Inform/Change) -> Visual timeline graphic -> HTML/CSS -> Justification: More intuitive for understanding date ranges than plain text.
+        - Resources: New section to provide links and interactive images for "where to apply", "destinations", and "booking tickets".
     -->
     <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
     <style>
@@ -84,6 +85,7 @@
                         <a data-target="costs" class="nav-link text-gray-600 hover:text-blue-500 border-b-2 border-transparent pb-1">Costs & Timelines</a>
                         <a data-target="avoid-rejection" class="nav-link text-gray-600 hover:text-blue-500 border-b-2 border-transparent pb-1">Avoid Rejection</a>
                         <a data-target="disclaimer" class="nav-link text-gray-600 hover:text-blue-500 border-b-2 border-transparent pb-1">Disclaimer</a>
+                        <a data-target="resources" class="nav-link text-gray-600 hover:text-blue-500 border-b-2 border-transparent pb-1">Resources</a>
                     </nav>
                 </div>
             </div>
@@ -97,6 +99,7 @@
                 <div class="text-center">
                     <h2 class="text-3xl md:text-4xl font-extrabold text-gray-900">Schengen Visa for Non-EU UK Residents</h2>
                     <p class="mt-4 max-w-3xl mx-auto text-lg text-gray-600">A simplified, interactive guide to navigate your application with confidence. This tool breaks down the official requirements for non-EU nationals residing in the UK.</p>
+                    <img src="https://images.unsplash.com/photo-1596780650965-bb358352b2f6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="Travel Europe Map" class="mt-8 mx-auto rounded-lg shadow-md w-full max-w-xl">
                 </div>
 
                 <div class="mt-12 bg-white p-8 rounded-xl shadow-lg border border-gray-200">
@@ -143,6 +146,7 @@
                 <div class="text-center">
                     <h2 class="text-3xl md:text-4xl font-extrabold text-gray-900">The 5-Step Application Process</h2>
                     <p class="mt-4 max-w-3xl mx-auto text-lg text-gray-600">Follow this structured path from planning your trip to receiving your passport back. Click on each step to see detailed information and key actions you need to take.</p>
+                    <img src="https://images.unsplash.com/photo-1507525428034-b723cf961fab?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="Path with footsteps" class="mt-8 mx-auto rounded-lg shadow-md w-full max-w-xl">
                 </div>
                 
                 <div class="mt-12 flex flex-col md:flex-row gap-8">
@@ -194,6 +198,7 @@
                 <div class="text-center">
                     <h2 class="text-3xl md:text-4xl font-extrabold text-gray-900">Interactive Document Hub</h2>
                     <p class="mt-4 max-w-3xl mx-auto text-lg text-gray-600">Your success depends on meticulous documentation. Use this interactive checklist to understand the requirements for each document. Click on an item to expand it and see critical details.</p>
+                    <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="Documents and paperwork" class="mt-8 mx-auto rounded-lg shadow-md w-full max-w-xl">
                 </div>
 
                 <div id="document-checklist" class="mt-12 max-w-4xl mx-auto space-y-3">
@@ -206,6 +211,7 @@
                 <div class="text-center">
                     <h2 class="text-3xl md:text-4xl font-extrabold text-gray-900">Costs & Application Timelines</h2>
                     <p class="mt-4 max-w-3xl mx-auto text-lg text-gray-600">Plan your budget and schedule effectively. This section provides a clear breakdown of visa fees and the crucial timelines you must adhere to for a smooth process.</p>
+                    <img src="https://images.unsplash.com/photo-1579621970795-87facc2f976d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="Money and calendar" class="mt-8 mx-auto rounded-lg shadow-md w-full max-w-xl">
                 </div>
                 
                 <div class="mt-12 grid md:grid-cols-2 gap-8">
@@ -248,6 +254,7 @@
                 <div class="text-center">
                     <h2 class="text-3xl md:text-4xl font-extrabold text-gray-900">How to Avoid Visa Rejection</h2>
                     <p class="mt-4 max-w-3xl mx-auto text-lg text-gray-600">Learn from common mistakes. Understanding why applications are refused is the best way to prepare a strong, successful submission. Click on each reason to see how to avoid it.</p>
+                    <img src="https://images.unsplash.com/photo-1544197157-e6097d740263?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="Success Checkmark" class="mt-8 mx-auto rounded-lg shadow-md w-full max-w-xl">
                 </div>
                 <div id="rejection-reasons" class="mt-12 max-w-4xl mx-auto space-y-3">
                     <!-- Rejection reasons will be dynamically inserted here -->
@@ -259,11 +266,71 @@
                 <div class="text-center">
                     <h2 class="text-3xl md:text-4xl font-extrabold text-gray-900">Disclaimer</h2>
                     <p class="mt-4 max-w-3xl mx-auto text-lg text-gray-600">Please note the following:</p>
+                    <img src="https://images.unsplash.com/photo-1621243805825-ed26303e07f7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="Legal Information" class="mt-8 mx-auto rounded-lg shadow-md w-full max-w-xl">
                 </div>
                 <div class="mt-12 bg-white p-8 rounded-xl shadow-lg border border-gray-200">
                     <p class="text-gray-700">The information provided in this Interactive Schengen Visa Guide is based purely on research conducted using publicly available government websites and official visa application center data at the time of creation.</p>
                     <p class="text-gray-700 mt-4">While every effort has been made to ensure accuracy and provide up-to-date information, visa requirements and procedures are subject to change without prior notice by the respective consular authorities of the Schengen member states. Therefore, this guide serves as a general informational resource only.</p>
                     <p class="text-gray-700 mt-4 font-semibold">It is imperative that all users consult the official websites of the specific Schengen country's embassy or consulate in the UK and their officially appointed visa application centers for the most current, accurate, and detailed information before initiating any application. This guide does not constitute legal advice, and for complex or unique individual circumstances, seeking professional legal advice from an immigration law specialist is always recommended.</p>
+                </div>
+            </section>
+
+            <!-- Resources Section -->
+            <section id="resources" class="content-section">
+                <div class="text-center">
+                    <h2 class="text-3xl md:text-4xl font-extrabold text-gray-900">Useful Resources for Your Trip</h2>
+                    <p class="mt-4 max-w-3xl mx-auto text-lg text-gray-600">Find official links and inspiration for your Schengen adventure.</p>
+                    <img src="https://images.unsplash.com/photo-1498050108023-c5249f4cd085?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="Resources Links" class="mt-8 mx-auto rounded-lg shadow-md w-full max-w-xl">
+                </div>
+
+                <div class="mt-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Where to Apply -->
+                    <div class="bg-white p-6 rounded-xl shadow-lg border border-gray-200 flex flex-col items-center text-center">
+                        <h3 class="text-xl font-bold text-gray-800 mb-4">Where to Apply</h3>
+                        <a href="https://visa.vfsglobal.com/gbr/en/nld/attend-centre" target="_blank" class="block w-full max-w-xs rounded-lg overflow-hidden mb-4 transform hover:scale-105 transition-transform">
+                            <img src="https://images.unsplash.com/photo-1596590230623-8637042a92c4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="Visa Application Centre" class="w-full h-auto rounded-lg">
+                        </a>
+                        <p class="text-gray-600 mb-4">Schengen visa applications in the UK are typically handled by official Visa Application Centres (VACs) appointed by the respective consulates.</p>
+                        <a href="https://visa.vfsglobal.com/gbr/en/nld/attend-centre" target="_blank" class="text-blue-600 hover:underline font-semibold">Find your VFS Global Centre</a>
+                        <a href="https://france-visas.gouv.fr/en/web/france-visas/a-qui-sadresser" target="_blank" class="text-blue-600 hover:underline font-semibold mt-2">Find your TLScontact Centre</a>
+                    </div>
+
+                    <!-- Popular Schengen Destinations -->
+                    <div class="bg-white p-6 rounded-xl shadow-lg border border-gray-200 flex flex-col items-center text-center">
+                        <h3 class="text-xl font-bold text-gray-800 mb-4">Popular Destinations</h3>
+                        <div class="grid grid-cols-2 gap-4 mb-4">
+                            <a href="https://www.gokitetours.com/best-schengen-countries-to-visit-for-your-dreamy-vacation/" target="_blank" class="block rounded-lg overflow-hidden transform hover:scale-105 transition-transform">
+                                <img src="https://images.unsplash.com/photo-1502602898660-a29d5b78ffba?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="Paris Eiffel Tower" class="w-full h-auto rounded-lg">
+                                <span class="text-sm text-gray-700 mt-1 block">Paris, France</span>
+                            </a>
+                            <a href="https://www.gokitetours.com/best-schengen-countries-to-visit-for-your-dreamy-vacation/" target="_blank" class="block rounded-lg overflow-hidden transform hover:scale-105 transition-transform">
+                                <img src="https://images.unsplash.com/photo-1552832230-c0197dd1dc86?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="Rome Colosseum" class="w-full h-auto rounded-lg">
+                                <span class="text-sm text-gray-700 mt-1 block">Rome, Italy</span>
+                            </a>
+                            <a href="https://www.gokitetours.com/best-schengen-countries-to-visit-for-your-dreamy-vacation/" target="_blank" class="block rounded-lg overflow-hidden transform hover:scale-105 transition-transform">
+                                <img src="https://images.unsplash.com/photo-1563273180-2c707d0f91a9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="Barcelona Sagrada Familia" class="w-full h-auto rounded-lg">
+                                <span class="text-sm text-gray-700 mt-1 block">Barcelona, Spain</span>
+                            </a>
+                            <a href="https://www.gokitetours.com/best-schengen-countries-to-visit-for-your-dreamy-vacation/" target="_blank" class="block rounded-lg overflow-hidden transform hover:scale-105 transition-transform">
+                                <img src="https://images.unsplash.com/photo-1614761498305-6a2c5b3e1b1d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="Santorini Oia" class="w-full h-auto rounded-lg">
+                                <span class="text-sm text-gray-700 mt-1 block">Santorini, Greece</span>
+                            </a>
+                        </div>
+                        <p class="text-gray-600 mb-4">Explore iconic cities and beautiful landscapes across the Schengen Area. Each country offers a unique experience!</p>
+                        <a href="https://www.gokitetours.com/best-schengen-countries-to-visit-for-your-dreamy-vacation/" target="_blank" class="text-blue-600 hover:underline font-semibold">Discover more destinations</a>
+                    </div>
+
+                    <!-- How to Book Tickets -->
+                    <div class="bg-white p-6 rounded-xl shadow-lg border border-gray-200 flex flex-col items-center text-center">
+                        <h3 class="text-xl font-bold text-gray-800 mb-4">How to Book Tickets</h3>
+                        <a href="https://www.skyscanner.net/" target="_blank" class="block w-full max-w-xs rounded-lg overflow-hidden mb-4 transform hover:scale-105 transition-transform">
+                            <img src="https://images.unsplash.com/photo-1505852924331-b8440751ca0b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="Flight and Hotel Booking" class="w-full h-auto rounded-lg">
+                        </a>
+                        <p class="text-gray-600 mb-4">Find and book your flights and accommodations with ease using reputable travel booking sites.</p>
+                        <a href="https://www.skyscanner.net/" target="_blank" class="text-blue-600 hover:underline font-semibold">Skyscanner</a>
+                        <a href="https://www.expedia.co.uk/" target="_blank" class="text-blue-600 hover:underline font-semibold mt-2">Expedia</a>
+                        <a href="https://www.lastminute.com/" target="_blank" class="text-blue-600 hover:underline font-semibold mt-2">Lastminute.com</a>
+                    </div>
                 </div>
             </section>
 
@@ -326,7 +393,7 @@ document.addEventListener('DOMContentLoaded', () => {
             content: `
                 <p class="text-gray-700 mb-4">After submission, the consulate will process your application. Patience is key.</p>
                 <ul class="space-y-3 list-disc list-inside text-gray-600">
-                    <li><strong>Processing Time:</strong> Standard time is around 15 working days, but can take up to 45 days. Do not contact the embassy before this period has passed.</li>
+                    <li><strong>Processing Time:</strong> Standard time is around 15 working days, but can extend to <strong class="font-semibold">45 days</strong> if extra checks are needed. Do not contact the embassy before this period has passed.</li>
                     <li><strong>Track Online:</strong> The VAC website will have a portal to track your application's status.</li>
                     <li><strong>Passport Collection:</strong> You will be notified when your passport is ready for collection or has been dispatched by courier.</li>
                     <li><strong>Check Your Visa:</strong> Once you receive your visa, immediately check all details (name, dates, validity) for any errors.</li>
