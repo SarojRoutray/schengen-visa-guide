@@ -65,6 +65,20 @@
             overflow: hidden;
             transition: max-height 0.5s ease-out;
         }
+        /* Spinner styles */
+        .spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-left-color: #3b82f6;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            animation: spin 1s linear infinite;
+            display: none; /* Hidden by default */
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
     </style>
 </head>
 <body class="bg-gray-50 text-gray-800">
@@ -331,6 +345,24 @@
                         <a href="https://www.expedia.co.uk/" target="_blank" class="text-blue-600 hover:underline font-semibold mt-2">Expedia</a>
                         <a href="https://www.lastminute.com/" target="_blank" class="text-blue-600 hover:underline font-semibold mt-2">Lastminute.com</a>
                     </div>
+
+                    <!-- New: Itinerary Planner -->
+                    <div class="bg-white p-6 rounded-xl shadow-lg border border-gray-200 flex flex-col items-center text-center lg:col-span-3">
+                        <h3 class="text-xl font-bold text-gray-800 mb-4">✨ Schengen Itinerary Planner ✨</h3>
+                        <img src="https://images.unsplash.com/photo-1476514525597-cd0a781077e6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="Itinerary Planning" class="w-full max-w-xs rounded-lg overflow-hidden mb-4 transform hover:scale-105 transition-transform">
+                        <p class="text-gray-600 mb-4">Let our AI assistant help you draft a personalized itinerary for your Schengen trip!</p>
+                        <div class="w-full max-w-md">
+                            <textarea id="itinerary-input" rows="4" class="w-full p-3 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500" placeholder="e.g., France and Italy for 10 days, focusing on historical sites"></textarea>
+                            <button id="generate-itinerary-btn" class="mt-4 px-6 py-2 bg-blue-600 text-white font-semibold rounded-md hover:bg-blue-700 transition flex items-center justify-center w-full">
+                                Generate Itinerary ✨
+                                <div id="itinerary-spinner" class="spinner ml-3"></div>
+                            </button>
+                            <div id="itinerary-output" class="mt-6 p-4 bg-gray-50 border border-gray-200 rounded-md text-left whitespace-pre-wrap text-gray-700">
+                                Your suggested itinerary will appear here.
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </section>
 
@@ -630,6 +662,64 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
         `;
         rejectionReasonsContainer.appendChild(item);
+    });
+
+    // --- GEMINI API INTEGRATION: ITINERARY PLANNER ---
+    const itineraryInput = document.getElementById('itinerary-input');
+    const generateItineraryBtn = document.getElementById('generate-itinerary-btn');
+    const itineraryOutput = document.getElementById('itinerary-output');
+    const itinerarySpinner = document.getElementById('itinerary-spinner');
+
+    generateItineraryBtn.addEventListener('click', async () => {
+        const userInput = itineraryInput.value.trim();
+        if (!userInput) {
+            itineraryOutput.textContent = "Please enter countries and duration for your itinerary.";
+            itineraryOutput.style.color = "red";
+            return;
+        }
+
+        // Show loading spinner
+        itinerarySpinner.style.display = 'block';
+        generateItineraryBtn.disabled = true; // Disable button during generation
+        itineraryOutput.textContent = ''; // Clear previous output
+        itineraryOutput.style.color = "initial"; // Reset color
+
+        try {
+            const prompt = `Generate a suggested travel itinerary for a trip covering ${userInput} in the Schengen Area, focusing on key attractions suitable for a tourist visa. Provide a day-by-day plan.`;
+            
+            let chatHistory = [];
+            chatHistory.push({ role: "user", parts: [{ text: prompt }] });
+            const payload = { contents: chatHistory };
+            const apiKey = ""; // Canvas will automatically provide the API key
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+
+            const response = await fetch(apiUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+
+            const result = await response.json();
+
+            if (result.candidates && result.candidates.length > 0 &&
+                result.candidates[0].content && result.candidates[0].content.parts &&
+                result.candidates[0].content.parts.length > 0) {
+                const text = result.candidates[0].content.parts[0].text;
+                itineraryOutput.textContent = text;
+            } else {
+                itineraryOutput.textContent = "Sorry, I couldn't generate an itinerary. Please try again with different input.";
+                itineraryOutput.style.color = "red";
+                console.error("Gemini API response structure unexpected:", result);
+            }
+        } catch (error) {
+            itineraryOutput.textContent = "An error occurred while generating the itinerary. Please try again later.";
+            itineraryOutput.style.color = "red";
+            console.error("Error calling Gemini API:", error);
+        } finally {
+            // Hide loading spinner and re-enable button
+            itinerarySpinner.style.display = 'none';
+            generateItineraryBtn.disabled = false;
+        }
     });
 
 });
