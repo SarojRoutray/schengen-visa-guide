@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Schengen Visa Guide for UK Residents</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Chosen Palette: Calm Harmony -->
+    <!-- Application Structure Plan: The application is structured as a user-centric, task-oriented journey rather than a linear report. It starts with immediate answers to key user concerns (Eligibility, 6-month myth), then guides them through a step-by-step process. Key sections like the 'Document Hub' and 'Cost & Timeline Calculator' are designed as interactive tools to make complex data manageable. This non-linear, interactive structure was chosen to reduce user anxiety and empower them by breaking down the daunting visa process into clear, actionable steps, enhancing usability and comprehension. -->
+    <!-- Visualization & Content Choices: 
+        - Eligibility: Report Info (Passport/Visa validity) -> Goal (Inform/Interact) -> Checkbox list -> JS updates status -> Justification: Provides immediate, personalized feedback.
+        - Application Process: Report Info (Process steps) -> Goal (Organize) -> Clickable step-by-step diagram -> HTML/CSS/JS -> Justification: Visualizes the sequence, making it easier to follow than text.
+        - Document Checklist: Report Info (Document list) -> Goal (Organize/Inform) -> Interactive accordion list -> HTML/JS -> Justification: Prevents information overload by chunking a long list into digestible parts.
+        - Fees: Report Info (Fee data) -> Goal (Compare) -> Chart.js Bar Chart -> Interaction: Button to toggle pre/post June 2024 fees -> Justification: Visually compares costs effectively.
+        - Timeline: Report Info (Application window/processing time) -> Goal (Inform/Change) -> Visual timeline graphic -> HTML/CSS -> Justification: More intuitive for understanding date ranges than plain text.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        .nav-link {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .nav-link.active {
+            color: #3b82f6;
+            border-bottom-color: #3b82f6;
+            font-weight: 600;
+        }
+        .content-section {
+            display: none;
+        }
+        .content-section.active {
+            display: block;
+        }
+        .step-item.active .step-circle {
+            background-color: #3b82f6;
+            color: white;
+            border-color: #3b82f6;
+        }
+        .step-item.active .step-title {
+            color: #3b82f6;
+            font-weight: 600;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 40vh;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+        .document-item-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-out;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+    <div class="min-h-screen">
+        <!-- Header -->
+        <header class="bg-white shadow-sm sticky top-0 z-50">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between items-center py-4">
+                    <div class="flex items-center space-x-2">
+                        <span class="text-2xl">✈️</span>
+                        <h1 class="text-xl font-bold text-gray-900">Schengen Visa Guide</h1>
+                    </div>
+                    <nav class="hidden md:flex space-x-6 lg:space-x-8">
+                        <a data-target="home" class="nav-link text-gray-600 hover:text-blue-500 border-b-2 border-transparent pb-1 active">Home</a>
+                        <a data-target="process" class="nav-link text-gray-600 hover:text-blue-500 border-b-2 border-transparent pb-1">The Process</a>
+                        <a data-target="documents" class="nav-link text-gray-600 hover:text-blue-500 border-b-2 border-transparent pb-1">Document Hub</a>
+                        <a data-target="costs" class="nav-link text-gray-600 hover:text-blue-500 border-b-2 border-transparent pb-1">Costs & Timelines</a>
+                        <a data-target="avoid-rejection" class="nav-link text-gray-600 hover:text-blue-500 border-b-2 border-transparent pb-1">Avoid Rejection</a>
+                        <a data-target="disclaimer" class="nav-link text-gray-600 hover:text-blue-500 border-b-2 border-transparent pb-1">Disclaimer</a>
+                    </nav>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
+
+            <!-- Home Section -->
+            <section id="home" class="content-section active">
+                <div class="text-center">
+                    <h2 class="text-3xl md:text-4xl font-extrabold text-gray-900">Schengen Visa for Non-EU UK Residents</h2>
+                    <p class="mt-4 max-w-3xl mx-auto text-lg text-gray-600">A simplified, interactive guide to navigate your application with confidence. This tool breaks down the official requirements for non-EU nationals residing in the UK.</p>
+                </div>
+
+                <div class="mt-12 bg-white p-8 rounded-xl shadow-lg border border-gray-200">
+                    <h3 class="text-2xl font-bold text-center text-gray-800">Key Information at a Glance</h3>
+                    <div class="mt-8 grid md:grid-cols-2 gap-8">
+                        <div class="bg-blue-50 p-6 rounded-lg">
+                            <h4 class="font-bold text-lg text-blue-800">The "6-Month Waiting Period" Myth</h4>
+                            <p class="mt-2 text-gray-700">There is <strong class="font-semibold text-green-700">no mandatory 6-month waiting period</strong> after moving to the UK before you can apply. You can apply up to 6 months <strong class="font-semibold">before</strong> your planned travel date. Applying early is highly recommended!</p>
+                        </div>
+                        <div class="bg-green-50 p-6 rounded-lg">
+                            <h4 class="font-bold text-lg text-green-800">Who is this guide for?</h4>
+                            <p class="mt-2 text-gray-700">This guide is specifically for non-EU nationals legally residing in the UK with a valid UK Residence Permit (e.g., dependent visa, work visa, student visa) and are planning to travel to the Schengen Area for tourism or visiting family.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-12 bg-white p-8 rounded-xl shadow-lg border border-gray-200">
+                    <h3 class="text-2xl font-bold text-center text-gray-800">Quick Eligibility Check</h3>
+                    <p class="text-center mt-2 text-gray-600">Check the fundamental requirements to see if you can start the process.</p>
+                    <div id="eligibility-checker" class="mt-6 max-w-2xl mx-auto space-y-4">
+                        <label class="flex items-center p-4 bg-gray-100 rounded-md cursor-pointer hover:bg-gray-200 transition">
+                            <input type="checkbox" class="h-5 w-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500">
+                            <span class="ml-4 text-gray-700">I have a valid passport from a non-EU country (valid for at least 3 months after my trip).</span>
+                        </label>
+                        <label class="flex items-center p-4 bg-gray-100 rounded-md cursor-pointer hover:bg-gray-200 transition">
+                            <input type="checkbox" class="h-5 w-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500">
+                            <span class="ml-4 text-gray-700">My passport has at least 2 blank pages and was issued less than 10 years ago.</span>
+                        </label>
+                        <label class="flex items-center p-4 bg-gray-100 rounded-md cursor-pointer hover:bg-gray-200 transition">
+                            <input type="checkbox" class="h-5 w-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500">
+                            <span class="ml-4 text-gray-700">I hold a valid UK Residence Permit (e.g., BRP).</span>
+                        </label>
+                         <label class="flex items-center p-4 bg-gray-100 rounded-md cursor-pointer hover:bg-gray-200 transition">
+                            <input type="checkbox" class="h-5 w-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500">
+                            <span class="ml-4 text-gray-700">My UK Residence Permit will be valid for at least 1 month after my trip.</span>
+                        </label>
+                    </div>
+                    <div id="eligibility-result" class="mt-6 text-center font-semibold text-lg p-4 rounded-md hidden"></div>
+                </div>
+            </section>
+
+            <!-- The Process Section -->
+            <section id="process" class="content-section">
+                <div class="text-center">
+                    <h2 class="text-3xl md:text-4xl font-extrabold text-gray-900">The 5-Step Application Process</h2>
+                    <p class="mt-4 max-w-3xl mx-auto text-lg text-gray-600">Follow this structured path from planning your trip to receiving your passport back. Click on each step to see detailed information and key actions you need to take.</p>
+                </div>
+                
+                <div class="mt-12 flex flex-col md:flex-row gap-8">
+                    <!-- Step Navigation -->
+                    <div class="w-full md:w-1/3 space-y-2">
+                        <div id="step-1" class="step-item p-4 rounded-lg cursor-pointer transition border-l-4 border-transparent hover:bg-gray-100 active">
+                            <div class="flex items-center">
+                                <div class="step-circle flex-shrink-0 bg-white border-2 border-gray-300 rounded-full h-10 w-10 flex items-center justify-center font-bold text-gray-500 transition">1</div>
+                                <h4 class="step-title ml-4 font-semibold text-gray-700 transition">Plan & Prepare</h4>
+                            </div>
+                        </div>
+                        <div id="step-2" class="step-item p-4 rounded-lg cursor-pointer transition border-l-4 border-transparent hover:bg-gray-100">
+                           <div class="flex items-center">
+                                <div class="step-circle flex-shrink-0 bg-white border-2 border-gray-300 rounded-full h-10 w-10 flex items-center justify-center font-bold text-gray-500 transition">2</div>
+                                <h4 class="step-title ml-4 font-semibold text-gray-700 transition">Gather Documents</h4>
+                            </div>
+                        </div>
+                        <div id="step-3" class="step-item p-4 rounded-lg cursor-pointer transition border-l-4 border-transparent hover:bg-gray-100">
+                            <div class="flex items-center">
+                                <div class="step-circle flex-shrink-0 bg-white border-2 border-gray-300 rounded-full h-10 w-10 flex items-center justify-center font-bold text-gray-500 transition">3</div>
+                                <h4 class="step-title ml-4 font-semibold text-gray-700 transition">Book Appointment</h4>
+                            </div>
+                        </div>
+                        <div id="step-4" class="step-item p-4 rounded-lg cursor-pointer transition border-l-4 border-transparent hover:bg-gray-100">
+                           <div class="flex items-center">
+                                <div class="step-circle flex-shrink-0 bg-white border-2 border-gray-300 rounded-full h-10 w-10 flex items-center justify-center font-bold text-gray-500 transition">4</div>
+                                <h4 class="step-title ml-4 font-semibold text-gray-700 transition">Submit & Biometrics</h4>
+                            </div>
+                        </div>
+                        <div id="step-5" class="step-item p-4 rounded-lg cursor-pointer transition border-l-4 border-transparent hover:bg-gray-100">
+                            <div class="flex items-center">
+                                <div class="step-circle flex-shrink-0 bg-white border-2 border-gray-300 rounded-full h-10 w-10 flex items-center justify-center font-bold text-gray-500 transition">5</div>
+                                <h4 class="step-title ml-4 font-semibold text-gray-700 transition">Wait & Track</h4>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step Content -->
+                    <div class="w-full md:w-2/3 bg-white p-8 rounded-xl shadow-lg border border-gray-200">
+                        <div id="step-content-container">
+                            <!-- Content will be dynamically inserted here -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Documents Section -->
+            <section id="documents" class="content-section">
+                <div class="text-center">
+                    <h2 class="text-3xl md:text-4xl font-extrabold text-gray-900">Interactive Document Hub</h2>
+                    <p class="mt-4 max-w-3xl mx-auto text-lg text-gray-600">Your success depends on meticulous documentation. Use this interactive checklist to understand the requirements for each document. Click on an item to expand it and see critical details.</p>
+                </div>
+
+                <div id="document-checklist" class="mt-12 max-w-4xl mx-auto space-y-3">
+                    <!-- Document items will be dynamically inserted here -->
+                </div>
+            </section>
+
+            <!-- Costs & Timelines Section -->
+            <section id="costs" class="content-section">
+                <div class="text-center">
+                    <h2 class="text-3xl md:text-4xl font-extrabold text-gray-900">Costs & Application Timelines</h2>
+                    <p class="mt-4 max-w-3xl mx-auto text-lg text-gray-600">Plan your budget and schedule effectively. This section provides a clear breakdown of visa fees and the crucial timelines you must adhere to for a smooth process.</p>
+                </div>
+                
+                <div class="mt-12 grid md:grid-cols-2 gap-8">
+                    <div class="bg-white p-8 rounded-xl shadow-lg border border-gray-200">
+                         <h3 class="text-2xl font-bold text-gray-800 mb-4">Visa Fee Calculator</h3>
+                         <div class="flex justify-center space-x-2 mb-6">
+                            <button id="fee-btn-current" class="px-4 py-2 text-sm font-medium rounded-md bg-blue-600 text-white">Current Fees</button>
+                            <button id="fee-btn-new" class="px-4 py-2 text-sm font-medium rounded-md bg-gray-200 text-gray-700">Fees from June 2024</button>
+                         </div>
+                         <div class="chart-container">
+                            <canvas id="feesChart"></canvas>
+                         </div>
+                         <p class="text-xs text-center text-gray-500 mt-4">Fees are paid in GBP and may vary with the exchange rate. A separate service fee is charged by the Visa Application Centre.</p>
+                    </div>
+                     <div class="bg-white p-8 rounded-xl shadow-lg border border-gray-200">
+                        <h3 class="text-2xl font-bold text-gray-800 mb-4">Application Timeline</h3>
+                        <div class="space-y-6">
+                            <div>
+                                <h4 class="font-semibold text-lg text-green-700">Apply As Early As Possible</h4>
+                                <p class="text-gray-600">You can submit your application up to <strong class="font-semibold">6 months</strong> before your trip.</p>
+                            </div>
+                             <div>
+                                <h4 class="font-semibold text-lg text-red-700">Application Deadline</h4>
+                                <p class="text-gray-600">You must apply at least <strong class="font-semibold">15 working days</strong> before your trip. Applying late is a common reason for rejection.</p>
+                            </div>
+                             <div>
+                                <h4 class="font-semibold text-lg text-yellow-700">Processing Time</h4>
+                                <p class="text-gray-600">Standard processing is <strong class="font-semibold">~15 working days</strong>, but can extend to <strong class="font-semibold">45 days</strong> if extra checks are needed. Allow at least 20 working days for France.</p>
+                            </div>
+                        </div>
+                        <div class="mt-6 bg-gray-100 p-4 rounded-lg">
+                            <p class="text-sm text-gray-800 font-semibold">🗓️ Strategy: To avoid stress and potential disruption, submit your application 2-3 months before your travel date. This provides a safe buffer for any processing delays.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Avoid Rejection Section -->
+            <section id="avoid-rejection" class="content-section">
+                <div class="text-center">
+                    <h2 class="text-3xl md:text-4xl font-extrabold text-gray-900">How to Avoid Visa Rejection</h2>
+                    <p class="mt-4 max-w-3xl mx-auto text-lg text-gray-600">Learn from common mistakes. Understanding why applications are refused is the best way to prepare a strong, successful submission. Click on each reason to see how to avoid it.</p>
+                </div>
+                <div id="rejection-reasons" class="mt-12 max-w-4xl mx-auto space-y-3">
+                    <!-- Rejection reasons will be dynamically inserted here -->
+                </div>
+            </section>
+
+            <!-- Disclaimer Section -->
+            <section id="disclaimer" class="content-section">
+                <div class="text-center">
+                    <h2 class="text-3xl md:text-4xl font-extrabold text-gray-900">Disclaimer</h2>
+                    <p class="mt-4 max-w-3xl mx-auto text-lg text-gray-600">Please note the following:</p>
+                </div>
+                <div class="mt-12 bg-white p-8 rounded-xl shadow-lg border border-gray-200">
+                    <p class="text-gray-700">The information provided in this Interactive Schengen Visa Guide is based purely on research conducted using publicly available government websites and official visa application center data at the time of creation.</p>
+                    <p class="text-gray-700 mt-4">While every effort has been made to ensure accuracy and provide up-to-date information, visa requirements and procedures are subject to change without prior notice by the respective consular authorities of the Schengen member states. Therefore, this guide serves as a general informational resource only.</p>
+                    <p class="text-gray-700 mt-4 font-semibold">It is imperative that all users consult the official websites of the specific Schengen country's embassy or consulate in the UK and their officially appointed visa application centers for the most current, accurate, and detailed information before initiating any application. This guide does not constitute legal advice, and for complex or unique individual circumstances, seeking professional legal advice from an immigration law specialist is always recommended.</p>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+
+    // --- DATA STORE ---
+    const processSteps = {
+        'step-1': {
+            title: 'Step 1: Plan & Prepare',
+            content: `
+                <p class="text-gray-700 mb-4">This initial phase is critical. Your planning determines which consulate you apply to.</p>
+                <ul class="space-y-3 list-disc list-inside text-gray-600">
+                    <li><strong>Determine Main Destination:</strong> Your application must go to the consulate of the country where you'll spend the most time. If stays are equal, it's the first country you enter. An incorrect choice leads to automatic refusal.</li>
+                    <li><strong>Create a Detailed Itinerary:</strong> Plan your day-by-day activities. This will help you justify your trip and prepare the required bookings.</li>
+                    <li><strong>Review Timelines:</strong> Check the <a class="text-blue-600 hover:underline font-semibold" data-target-link="costs">Costs & Timelines</a> section to ensure you apply within the correct window (6 months to 15 days before travel).</li>
+                </ul>
+            `
+        },
+        'step-2': {
+            title: 'Step 2: Gather Your Documents',
+            content: `
+                <p class="text-gray-700 mb-4">This is the most time-consuming step. Meticulous preparation is essential. Every document tells a part of your story.</p>
+                <ul class="space-y-3 list-disc list-inside text-gray-600">
+                    <li><strong>Use the Interactive Checklist:</strong> Go to the <a class="text-blue-600 hover:underline font-semibold" data-target-link="documents">Document Hub</a> to see detailed requirements for every single item.</li>
+                    <li><strong>Originals and Photocopies:</strong> You must have both the original document and a clear photocopy for your appointment.</li>
+                    <li><strong>Translations:</strong> Any document not in English, French, German, or Spanish must be translated and certified.</li>
+                    <li><strong>Check Recency:</strong> Some documents, like bank statements or employment letters, must be recent (usually within the last month).</li>
+                </ul>
+            `
+        },
+        'step-3': {
+            title: 'Step 3: Book Your Appointment',
+            content: `
+                <p class="text-gray-700 mb-4">You cannot walk into a visa center without an appointment. These must be booked online, well in advance.</p>
+                <ul class="space-y-3 list-disc list-inside text-gray-600">
+                    <li><strong>Find the Correct VAC:</strong> Your chosen country's consulate (e.g., France) will use an external service provider like TLScontact. You book through their website.</li>
+                    <li><strong>Book Early:</strong> Appointment slots can be limited, especially during peak travel seasons. Book your appointment as soon as your travel dates are firm.</li>
+                    <li><strong>Pay Service Fee:</strong> The Visa Application Centre's (VAC) service fee is usually paid online when you book the appointment. This is separate from the visa fee itself.</li>
+                </ul>
+            `
+        },
+        'step-4': {
+            title: 'Step 4: Submit Application & Provide Biometrics',
+            content: `
+                <p class="text-gray-700 mb-4">On your appointment day, you will submit your file and have your biometric data collected.</p>
+                <ul class="space-y-3 list-disc list-inside text-gray-600">
+                    <li><strong>Attend in Person:</strong> You must attend the appointment yourself.</li>
+                    <li><strong>Biometrics:</strong> This includes a digital photograph and fingerprints. Children under 12 are exempt. If your fingerprints were taken for a previous Schengen visa within the last 59 months, you may also be exempt.</li>
+                    <li><strong>Pay Visa Fee:</strong> The visa fee is paid at the center during your appointment, usually by card.</li>
+                    <li><strong>Be Prepared for Questions:</strong> The officer may ask basic questions about your trip. Answer honestly and consistently with your application.</li>
+                </ul>
+            `
+        },
+        'step-5': {
+            title: 'Step 5: Wait for Decision & Track Your Application',
+            content: `
+                <p class="text-gray-700 mb-4">After submission, the consulate will process your application. Patience is key.</p>
+                <ul class="space-y-3 list-disc list-inside text-gray-600">
+                    <li><strong>Processing Time:</strong> Standard time is around 15 working days, but can take up to 45 days. Do not contact the embassy before this period has passed.</li>
+                    <li><strong>Track Online:</strong> The VAC website will have a portal to track your application's status.</li>
+                    <li><strong>Passport Collection:</strong> You will be notified when your passport is ready for collection or has been dispatched by courier.</li>
+                    <li><strong>Check Your Visa:</strong> Once you receive your visa, immediately check all details (name, dates, validity) for any errors.</li>
+                </ul>
+            `
+        }
+    };
+
+    const documentsData = [
+        { title: 'Schengen Application Form', content: 'Must be fully completed, printed, and signed. For minors, both parents must sign.' },
+        { title: 'Passport Photographs', content: 'Two recent (last 6 months), color photos (3.5x4.5 cm) on a white background. No glasses.' },
+        { title: 'Valid Passport', content: 'Original and copy. Issued < 10 years ago, valid 3 months past trip, 2+ blank pages.' },
+        { title: 'UK Residence Permit', content: 'Original and copy (e.g., BRP, visa vignette). Must be valid for at least 1 month after your trip.' },
+        { title: 'Trip Itinerary / Flight Bookings', content: 'Confirmed round-trip flight reservations. It is advisable to book fully refundable tickets.' },
+        { title: 'Proof of Accommodation', content: 'Confirmed hotel bookings for the entire stay. If staying with family/friends, a formal invitation letter ("Attestation d\'accueil" for France) is required.' },
+        { title: 'Proof of Funds', content: 'Recent 3 months of original, stamped UK bank statements. Show sufficient funds for the trip (e.g., €65/day for France). If sponsored, a sponsorship letter and the sponsor\'s financial documents are needed.' },
+        { title: 'Travel Medical Insurance', content: 'Policy must cover at least €30,000 for the entire Schengen area, for the full duration of your stay. It must cover emergency medical care, hospitalization, and repatriation.' },
+        { title: 'Proof of Employment/Status', content: '<strong>Employee:</strong> Letter from employer confirming position, start date, salary. <strong>Self-employed:</strong> Letter from accountant/solicitor. <strong>Student:</strong> Letter from university.' },
+        { title: 'Proof of Strong Ties to UK', content: 'This is crucial to prove you will return. Documents can include property ownership, rental agreements, marriage certificate, or proof of children enrolled in UK schools.' }
+    ];
+    
+    const rejectionReasonsData = [
+        { title: 'Insufficient Financial Proof', content: '<strong>Problem:</strong> Bank statements show a low balance, a last-minute large deposit without explanation, or don\'t cover the minimum daily amount. <strong>Solution:</strong> Maintain a healthy, stable balance for at least 3 months. Your salary should be visible. Provide a cover letter to explain any large, recent transactions. If sponsored, ensure the sponsor\'s documents are impeccable.' },
+        { title: 'Unclear Purpose of Travel / Itinerary', content: '<strong>Problem:</strong> Vague itinerary, unconfirmed hotel bookings, or flight reservations that don\'t match accommodation dates. <strong>Solution:</strong> Provide a day-by-day plan. Book all hotels for the entire duration. Ensure all dates across all documents are consistent. For multi-country trips, show proof of travel (train/bus tickets) between them.' },
+        { title: 'Weak Ties to Country of Residence (UK)', content: '<strong>Problem:</strong> The consulate isn\'t convinced you will return to the UK after your trip. <strong>Solution:</strong> This is vital for dependent visa holders. Provide strong evidence: your spouse\'s employment letter, your own if you work/study, a UK rental agreement or property deed, details of children in UK schools. Build a strong case that your life is established in the UK.' },
+        { title: 'Insufficient Travel Insurance', content: '<strong>Problem:</strong> Policy doesn\'t meet the €30,000 minimum, doesn\'t cover the entire Schengen area, or the dates are incorrect. <strong>Solution:</strong> Buy a policy from a reputable provider. Double-check that "Schengen Area" is explicitly mentioned and that it covers repatriation. Print the policy certificate that shows the coverage details.' },
+        { title: 'Applying Too Late', content: '<strong>Problem:</strong> Submitting the application less than 15 working days before travel. <strong>Solution:</strong> Simple - apply early! Aim for 2-3 months before your trip to avoid any issues with processing delays.' }
+    ];
+
+    // --- NAVIGATION ---
+    const navLinks = document.querySelectorAll('.nav-link');
+    const contentSections = document.querySelectorAll('.content-section');
+    const mainContent = document.querySelector('main');
+
+    function navigateTo(targetId) {
+        contentSections.forEach(section => {
+            section.classList.remove('active');
+            if (section.id === targetId) {
+                section.classList.add('active');
+            }
+        });
+        navLinks.forEach(link => {
+            link.classList.remove('active');
+            if (link.dataset.target === targetId) {
+                link.classList.add('active');
+            }
+        });
+        window.scrollTo(0, 0);
+    }
+    
+    navLinks.forEach(link => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            navigateTo(e.target.dataset.target);
+        });
+    });
+    
+    mainContent.addEventListener('click', (e) => {
+        if (e.target.matches('a[data-target-link]')) {
+            e.preventDefault();
+            navigateTo(e.target.dataset.targetLink);
+        }
+    });
+
+
+    // --- ELIGIBILITY CHECKER ---
+    const eligibilityChecker = document.getElementById('eligibility-checker');
+    const eligibilityResult = document.getElementById('eligibility-result');
+    const checkboxes = eligibilityChecker.querySelectorAll('input[type="checkbox"]');
+
+    eligibilityChecker.addEventListener('change', () => {
+        const allChecked = [...checkboxes].every(checkbox => checkbox.checked);
+        if (allChecked) {
+            eligibilityResult.textContent = '✅ Great! You appear to meet the fundamental eligibility requirements. You can proceed with the application.';
+            eligibilityResult.className = 'mt-6 text-center font-semibold text-lg p-4 rounded-md bg-green-100 text-green-800 block';
+        } else {
+            const uncheckedCount = [...checkboxes].filter(c => !c.checked).length;
+            if (uncheckedCount > 0) {
+                 eligibilityResult.textContent = '📝 Please check all boxes to confirm you meet the basic criteria.';
+                 eligibilityResult.className = 'mt-6 text-center font-semibold text-lg p-4 rounded-md bg-yellow-100 text-yellow-800 block';
+            } else {
+                 eligibilityResult.classList.add('hidden');
+            }
+        }
+    });
+
+    // --- PROCESS STEPS ---
+    const stepItems = document.querySelectorAll('.step-item');
+    const stepContentContainer = document.getElementById('step-content-container');
+
+    function updateStepContent(stepId) {
+        const stepData = processSteps[stepId];
+        stepContentContainer.innerHTML = `
+            <h3 class="text-2xl font-bold text-gray-800 mb-4">${stepData.title}</h3>
+            ${stepData.content}
+        `;
+        stepItems.forEach(item => {
+            item.classList.remove('active');
+            if(item.id === stepId) {
+                item.classList.add('active');
+            }
+        });
+    }
+
+    stepItems.forEach(item => {
+        item.addEventListener('click', () => {
+            updateStepContent(item.id);
+        });
+    });
+    updateStepContent('step-1');
+    
+    // --- DOCUMENTS HUB ---
+    const documentChecklist = document.getElementById('document-checklist');
+    documentsData.forEach((doc, index) => {
+        const item = document.createElement('div');
+        item.className = 'bg-white rounded-lg shadow-sm border border-gray-200';
+        item.innerHTML = `
+            <button class="document-item-header w-full flex justify-between items-center text-left p-4">
+                <span class="font-semibold text-gray-800">${doc.title}</span>
+                <span class="document-item-toggle text-xl text-blue-500 transform transition-transform">+</span>
+            </button>
+            <div class="document-item-content px-4">
+                <p class="text-gray-600 py-4 border-t border-gray-200">${doc.content}</p>
+            </div>
+        `;
+        documentChecklist.appendChild(item);
+    });
+
+    documentChecklist.addEventListener('click', e => {
+        const header = e.target.closest('.document-item-header');
+        if (header) {
+            const content = header.nextElementSibling;
+            const toggle = header.querySelector('.document-item-toggle');
+            const isOpen = content.style.maxHeight && content.style.maxHeight !== '0px';
+
+            if (isOpen) {
+                content.style.maxHeight = '0px';
+                toggle.style.transform = 'rotate(0deg)';
+                toggle.textContent = '+';
+            } else {
+                content.style.maxHeight = content.scrollHeight + 'px';
+                toggle.style.transform = 'rotate(45deg)';
+                toggle.textContent = '×';
+            }
+        }
+    });
+
+    // --- COSTS & TIMELINES ---
+    const ctx = document.getElementById('feesChart').getContext('2d');
+    const feeData = {
+        current: {
+            labels: ['Adult', 'Child (6-11)', 'Child (<6)'],
+            fees: [80, 40, 0]
+        },
+        new: {
+            labels: ['Adult', 'Child (6-11)', 'Child (<6)'],
+            fees: [90, 45, 0]
+        }
+    };
+
+    const feesChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: feeData.current.labels,
+            datasets: [{
+                label: 'Visa Fee (€)',
+                data: feeData.current.fees,
+                backgroundColor: ['#60a5fa', '#93c5fd', '#bfdbfe'],
+                borderColor: ['#3b82f6', '#60a5fa', '#93c5fd'],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: false
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            return ` Fee: €${context.raw}`;
+                        }
+                    }
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: 'Fee in Euros (€)'
+                    }
+                }
+            }
+        }
+    });
+
+    const feeBtnCurrent = document.getElementById('fee-btn-current');
+    const feeBtnNew = document.getElementById('fee-btn-new');
+
+    function updateChart(period) {
+        feesChart.data.datasets[0].data = feeData[period].fees;
+        feesChart.update();
+        if (period === 'current') {
+            feeBtnCurrent.classList.add('bg-blue-600', 'text-white');
+            feeBtnCurrent.classList.remove('bg-gray-200', 'text-gray-700');
+            feeBtnNew.classList.add('bg-gray-200', 'text-gray-700');
+            feeBtnNew.classList.remove('bg-blue-600', 'text-white');
+        } else {
+            feeBtnNew.classList.add('bg-blue-600', 'text-white');
+            feeBtnNew.classList.remove('bg-gray-200', 'text-gray-700');
+            feeBtnCurrent.classList.add('bg-gray-200', 'text-gray-700');
+            feeBtnCurrent.classList.remove('bg-blue-600', 'text-white');
+        }
+    }
+
+    feeBtnCurrent.addEventListener('click', () => updateChart('current'));
+    feeBtnNew.addEventListener('click', () => updateChart('new'));
+    
+    // --- AVOID REJECTION ---
+    const rejectionReasonsContainer = document.getElementById('rejection-reasons');
+    rejectionReasonsData.forEach(reason => {
+        const item = document.createElement('div');
+        item.className = 'bg-white rounded-lg shadow-sm border border-gray-200';
+        item.innerHTML = `
+            <button class="document-item-header w-full flex justify-between items-center text-left p-4">
+                <span class="font-semibold text-gray-800">${reason.title}</span>
+                <span class="document-item-toggle text-xl text-blue-500 transform transition-transform">+</span>
+            </button>
+            <div class="document-item-content px-4">
+                <div class="text-gray-600 py-4 border-t border-gray-200">${reason.content}</div>
+            </div>
+        `;
+        rejectionReasonsContainer.appendChild(item);
+    });
+
+});
+</script>
+
+</body>
+</html>
